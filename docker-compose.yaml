@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  postgres_api1:
+    image: postgres:latest
+    container_name: postgres_api1
+    environment:
+      POSTGRES_USER: api1
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: api1
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_api1_data:/var/lib/postgresql/data
+
+  postgres_api2:
+    image: postgres:latest
+    container_name: postgres_api2
+    environment:
+      POSTGRES_USER: api2
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: api2
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_api2_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_api1_data:
+  postgres_api2_data:
