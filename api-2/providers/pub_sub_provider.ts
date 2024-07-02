@@ -33,7 +33,7 @@ export default class PubSubProvider {
     // Importa a função de lidar com tabelas
     const table = await import('#services/pub_sub_table')
     // Inicializa o PubSub
-    subscription.listenMessagesV2(new table.PubSubHandlerTable().handlerTable, 'API1')
+    subscription.listenMessagesV2(new table.PubSubHandlerTable().handlerTable, 'API2')
   }
 
   /**

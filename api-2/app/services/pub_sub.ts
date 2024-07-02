@@ -13,7 +13,7 @@ export class PubSubService {
       console.log('sendToPubSub')
       const publish = env.get('GOOGLE_PUBSUB_TOPIC', '')
       const pubPublish = new GooglePubSubPublish(publish)
-      await pubPublish.createMessages(object, action, table, api ?? 'API1')
+      await pubPublish.createMessages(object, action, table, api ?? 'API2')
     } catch (err) {
       console.error('Erro ao criar mensagem', err)
     }
