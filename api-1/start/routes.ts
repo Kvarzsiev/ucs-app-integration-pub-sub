@@ -17,4 +17,7 @@ router.get('/', async () => {
 
 const UsersController = () => import('#controllers/users_controller')
 
+router.get('user/', [UsersController, 'index'])
 router.post('user/', [UsersController, 'store'])
+router.put('user/:id', [UsersController, 'update'])
+router.delete('user/:id', [UsersController, 'delete'])

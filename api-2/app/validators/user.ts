@@ -20,10 +20,7 @@ export const updateUserValidator = vine.compile(
     birthDate: vine.date(),
     email: vine.string().email().trim().escape(),
 
-    // Validate route params
-    params: vine.object({
-      id: vine.number(),
-    }),
+    id: vine.number(),
   })
 )
 
@@ -32,9 +29,6 @@ export const updateUserValidator = vine.compile(
  */
 export const deleteUserValidator = vine.compile(
   vine.object({
-    // Validate route params
-    params: vine.object({
-      id: vine.number(),
-    }),
+    id: vine.number(),
   })
 )

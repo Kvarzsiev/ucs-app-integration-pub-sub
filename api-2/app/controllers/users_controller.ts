@@ -17,12 +17,11 @@ export default class UsersController {
     const user = await db.transaction(async (trx) => {
       const transactedUser = await User.create(payload, { client: trx })
 
-      console.log('transaction')
       await PubSubService.sendToPubSub(
         transactedUser.$attributes,
         PubSubActionEnum.insert,
         'users',
-        'API1'
+        'API2'
       )
 
       return transactedUser
@@ -32,35 +31,40 @@ export default class UsersController {
   }
 
   async update({ request, response }: HttpContext) {
-    const payload = await updateUserValidator.validate(request.all())
+    const payload = await updateUserValidator.validate({
+      ...request.all(),
+      ...request.params(),
+    })
 
     const user = await db.transaction(async (trx) => {
-      const transactedUser = await User.findByOrFail('id', payload.params.id, { client: trx })
+      const transactedUser = await User.findByOrFail('id', payload.id, { client: trx })
 
       transactedUser.name = payload.name
       transactedUser.email = payload.email
       transactedUser.birthDate = payload.birthDate
-      await user.useTransaction(trx).save()
+      await transactedUser.useTransaction(trx).save()
 
       await PubSubService.sendToPubSub(
         transactedUser.$attributes,
         PubSubActionEnum.update,
         'users',
-        'API1'
+        'API2'
       )
 
       return transactedUser
     })
 
-    response.ok(payload)
+    response.ok(user)
   }
 
   async delete({ request, response }: HttpContext) {
-    const payload = await deleteUserValidator.validate(request.all())
+    const payload = await deleteUserValidator.validate(request.params())
 
     await db.transaction(async (trx) => {
-      const user = await User.findByOrFail('id', payload.params.id, { client: trx })
+      const user = await User.findByOrFail('id', payload.id, { client: trx })
       await user.useTransaction(trx).delete()
+
+      await PubSubService.sendToPubSub(user.$attributes, PubSubActionEnum.delete, 'users', 'API2')
     })
 
     response.noContent()

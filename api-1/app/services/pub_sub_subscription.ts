@@ -13,9 +13,9 @@ export class GooglePubSubSubscription {
   ): Promise<void> {
     this._subscription.on('message', async (message: any) => {
       const data = JSON.parse(message.data.toString())
-      console.log('message received', data)
       const pubSubModel = new PubSubModel(data.value, data.action, data.table, data.api)
       if (pubSubModel.api !== 'API1') {
+        console.log('message received', data)
         await fn(pubSubModel)
           .then(() => {
             message.ack()
